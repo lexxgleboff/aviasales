@@ -3,5 +3,8 @@
   "trailingComma": "es5",
   "endOfLine": "auto",
   "printWidth": 120,
-  "semi": false
+  "semi": false,
+  "jsxBracketSameLine": true,
+  "bracketSpacing": true,
+  "singleAttributePerLine": true
 }
