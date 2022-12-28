@@ -1,0 +1,33 @@
+.filter
+  display: flex
+  justify-content: center
+  align-items: center
+  &__name
+    text-transform: uppercase
+    background-color: #fff
+    border: 1px solid #DFE5EC
+    font-weight: 600
+    padding: 15px
+    cursor: pointer
+    display: block
+    width: 168px
+    font-size: 12px
+    text-align: center
+    &:hover
+      background-color: #2196F3
+      border: 1px solid #2196F3
+      color: #fff
+  &__input[type='radio']
+    display: none
+  &__input[type='radio']:checked + &__name
+    background-color: #2196F3
+    color: #fff
+    border: none
+    padding: 16px
+.first-name
+  border-radius: 5px 0 0 5px
+  border-right: 0
+.last-name
+  border-radius: 0 5px 5px 0
+  border-left: 0
+

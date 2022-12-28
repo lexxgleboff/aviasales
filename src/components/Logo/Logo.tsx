@@ -1,10 +1,10 @@
 import React from 'react'
+import classes from './Logo.module.sass'
 import logo from '../../images/Logo.png'
-import './logo.sass'
 
 export default function Logo() {
   return (
-    <div className="logo">
+    <div className={classes.logo}>
       <img
         src={logo}
         alt="logo"

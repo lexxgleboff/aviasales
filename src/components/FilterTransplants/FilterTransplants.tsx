@@ -1,11 +1,11 @@
 import React from 'react'
-import './FilterTransplants.sass'
+import classes from './FilterTransplants.module.sass'
 
 export default function FilterTransplants() {
   return (
-    <div className="transplants">
-      <span className="transplants__title">количество пересадок</span>
-      <label className="transplants__label">
+    <div className={classes.transplants}>
+      <span className={classes['transplants__title']}>количество пересадок</span>
+      <label className={classes['transplants__label']}>
         <input
           type="checkbox"
           id="all"
@@ -13,7 +13,7 @@ export default function FilterTransplants() {
         />
         <span>Все</span>
       </label>
-      <label className="transplants__label">
+      <label className={classes['transplants__label']}>
         <input
           type="checkbox"
           id="non-stop"
@@ -21,7 +21,7 @@ export default function FilterTransplants() {
         />
         <span>Без пересадок</span>
       </label>
-      <label className="transplants__label">
+      <label className={classes['transplants__label']}>
         <input
           type="checkbox"
           id="transplant1"
@@ -29,7 +29,7 @@ export default function FilterTransplants() {
         />
         <span>1 пересадка</span>
       </label>
-      <label className="transplants__label">
+      <label className={classes['transplants__label']}>
         <input
           type="checkbox"
           id="transplant2"
@@ -37,7 +37,7 @@ export default function FilterTransplants() {
         />
         <span>2 пересадка</span>
       </label>
-      <label className="transplants__label">
+      <label className={classes['transplants__label']}>
         <input
           type="checkbox"
           id="transplant3"
