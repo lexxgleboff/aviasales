@@ -40,9 +40,15 @@ type Ticket = {
 type TicketsState = {
   tickets: Ticket[]
   loading: boolean | null
-  stop: boolean
   error: string | null
   searchId: string | null
+  showMoreCount: number
+  radioValue: string | null
+  all: boolean
+  nonStop: boolean
+  transplant1: boolean
+  transplant2: boolean
+  transplant3: boolean
 }
 
 export const fetchSearchId = createAsyncThunk<string>('ticket/fetchSearchId', async () => {
@@ -56,28 +62,34 @@ export const fetchTicket = createAsyncThunk<
   undefined,
   { rejectValue: string; state: { ticket: TicketsState } }
 >('ticket/fetchTicket', async (_, { getState, rejectWithValue, dispatch }) => {
-  const { searchId, stop } = getState().ticket
-  if (!stop) {
-    const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
-    if (response.status === 500) {
-      dispatch(fetchTicket())
-    }
-    if (!response.ok) {
-      return rejectWithValue('Server Error')
-    }
-    const data = await response.json()
+  const { searchId } = getState().ticket
+  const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
+  if (response.status === 500) {
     dispatch(fetchTicket())
-    return data
   }
-  return rejectWithValue
+  const data = await response.json()
+  const { stop } = data
+  if (!response.ok) {
+    return rejectWithValue('Server Error')
+  }
+  if (!stop) {
+    dispatch(fetchTicket())
+  }
+  return data
 })
 
 const initialState: TicketsState = {
   tickets: [],
   loading: null,
-  stop: false,
   error: null,
   searchId: null,
+  showMoreCount: 5,
+  radioValue: null,
+  all: true,
+  nonStop: true,
+  transplant1: true,
+  transplant2: true,
+  transplant3: true,
 }
 
 // const setError = (state, action) => {
@@ -88,7 +100,69 @@ const initialState: TicketsState = {
 const ticketSlice = createSlice({
   name: 'ticket',
   initialState,
-  reducers: {},
+  reducers: {
+    showMore(state) {
+      state.showMoreCount += 5
+    },
+    minPrice(state, action) {
+      state.radioValue = action.payload
+      state.tickets.sort((ticket1: Ticket, ticket2: Ticket) => (ticket1['price'] > ticket2['price'] ? 1 : -1))
+    },
+    fastTicket(state, action) {
+      state.radioValue = action.payload
+      state.tickets.sort((ticket1: Ticket, ticket2: Ticket) =>
+        ticket1.segments[0]['duration'] + ticket1.segments[1]['duration'] >
+        ticket2.segments[0]['duration'] + ticket2.segments[1]['duration']
+          ? 1
+          : -1
+      )
+    },
+    optimal(state, action) {
+      state.radioValue = action.payload
+      state.tickets
+        .sort(
+          (ticket1: Ticket, ticket2: Ticket) =>
+            ticket1.segments[0].duration +
+            ticket1.segments[1].duration -
+            (ticket2.segments[0].duration + ticket2.segments[1].duration)
+        )
+        .sort((ticket1: Ticket, ticket2: Ticket) => ticket1['price'] - ticket2['price'])
+    },
+    allChecked(state, action) {
+      state.all = action.payload
+      if (state.all) {
+        state.nonStop = true
+        state.transplant1 = true
+        state.transplant2 = true
+        state.transplant3 = true
+      } else {
+        state.nonStop = false
+        state.transplant1 = false
+        state.transplant2 = false
+        state.transplant3 = false
+      }
+    },
+    nonTransplants(state, action) {
+      state.nonStop = action.payload
+      if (!state.nonStop) state.all = false
+      if (state.nonStop && state.transplant1 && state.transplant2 && state.transplant3) state.all = true
+    },
+    changeTransplant1(state, action) {
+      state.transplant1 = action.payload
+      if (!state.transplant1) state.all = false
+      if (state.nonStop && state.transplant1 && state.transplant2 && state.transplant3) state.all = true
+    },
+    changeTransplant2(state, action) {
+      state.transplant2 = action.payload
+      if (!state.transplant2) state.all = false
+      if (state.nonStop && state.transplant1 && state.transplant2 && state.transplant3) state.all = true
+    },
+    changeTransplant3(state, action) {
+      state.transplant3 = action.payload
+      if (!state.transplant3) state.all = false
+      if (state.nonStop && state.transplant1 && state.transplant2 && state.transplant3) state.all = true
+    },
+  },
   // extraReducers: {
   //   [fetchSearchId.pending]: (state) => {
   //     state.status = 'loading'
@@ -124,7 +198,6 @@ const ticketSlice = createSlice({
       .addCase(fetchTicket.fulfilled, (state, action) => {
         state.loading = false
         state.tickets.push(...action.payload.tickets)
-        state.stop = action.payload.stop
       })
       .addMatcher(isError, (state, action: PayloadAction<string>) => {
         state.error = action.payload
@@ -133,7 +206,17 @@ const ticketSlice = createSlice({
   },
 })
 
-// export const {} = ticketSlice.actions
+export const {
+  showMore,
+  minPrice,
+  fastTicket,
+  optimal,
+  allChecked,
+  nonTransplants,
+  changeTransplant1,
+  changeTransplant2,
+  changeTransplant3,
+} = ticketSlice.actions
 export default ticketSlice.reducer
 
 function isError(action: AnyAction) {

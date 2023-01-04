@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
+import { InfinitySpin } from 'react-loader-spinner'
 import classes from './App.module.sass'
 import { useAppDispatch, useAppSelector } from '../../hook'
 import { fetchSearchId, fetchTicket } from '../../store/ticketSlice'
 import FilterTransplants from '../FilterTransplants/FilterTransplants'
 import Filter from '../Filter/Filter'
-import Ticket from '../Ticket/Ticket'
 import Logo from '../Logo/Logo'
+import TicketList from '../TicketList/TicketList'
 
 function App() {
   const dispatch = useAppDispatch()
-  const { searchId } = useAppSelector((state) => state.ticket)
-
+  const { searchId, loading } = useAppSelector((state) => state.ticket)
   useEffect(() => {
     dispatch(fetchSearchId())
   }, [])
@@ -26,7 +26,13 @@ function App() {
         <FilterTransplants></FilterTransplants>
         <div>
           <Filter></Filter>
-          <Ticket></Ticket>
+          {loading ? (
+            <div className={classes.loading}>
+              <InfinitySpin color="#2196F3"></InfinitySpin>
+            </div>
+          ) : (
+            <TicketList></TicketList>
+          )}
         </div>
       </div>
     </>
