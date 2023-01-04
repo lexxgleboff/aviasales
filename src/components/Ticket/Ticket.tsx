@@ -1,7 +1,6 @@
-/* eslint-disable no-nested-ternary */
-import React from 'react'
-import { format, minutesToMilliseconds } from 'date-fns'
 import classes from './Ticket.module.sass'
+import { getCountTransfer } from '../../utils/getCountTransfer'
+import { getTimeEnd, getTimeFromMins, getTimeStart } from '../../utils/getTime'
 
 interface TicketProps {
   price: number
@@ -37,31 +36,6 @@ interface TicketProps {
 const Ticket: React.FC<TicketProps> = ({ price, carrier, segments }) => {
   const forward = segments[0]
   const backward = segments[1]
-
-  function getCountTransfer(stops: string[]) {
-    return stops.length === 0
-      ? 'Без пересадок'
-      : stops.length === 1
-      ? '1 пересадка'
-      : stops.length === 2
-      ? '2 пересадки'
-      : '3 пересадки'
-  }
-
-  function getTimeFromMins(mins: number) {
-    const hours = Math.trunc(mins / 60)
-    const minutes = mins % 60
-    return `${hours}ч ${minutes}м`
-  }
-
-  function getTimeStart(date: string) {
-    return `${new Date(date).getHours()}:${new Date(date).getMinutes()}`
-  }
-
-  function getTimeEnd(date: string, mins: number) {
-    const timeStart = minutesToMilliseconds(new Date(date).getHours() * 60 + new Date(date).getMinutes() + mins - 180)
-    return format(timeStart, 'HH:mm')
-  }
 
   return (
     <div className={classes.ticket}>

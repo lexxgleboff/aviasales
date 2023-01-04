@@ -1,6 +1,5 @@
-import React from 'react'
 import classes from './Logo.module.sass'
-import logo from '../../images/Logo.png'
+import logo from '../../assets/Logo.png'
 
 export default function Logo() {
   return (

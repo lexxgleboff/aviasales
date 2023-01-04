@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { InfinitySpin } from 'react-loader-spinner'
 import classes from './App.module.sass'
 import { useAppDispatch, useAppSelector } from '../../hook'
@@ -24,7 +24,7 @@ function App() {
       <Logo></Logo>
       <div className={classes.container}>
         <FilterTransplants></FilterTransplants>
-        <div>
+        <div className={classes.wrapper}>
           <Filter></Filter>
           {loading ? (
             <div className={classes.loading}>

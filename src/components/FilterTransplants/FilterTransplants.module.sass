@@ -14,6 +14,8 @@
     font-weight: 600
     padding: 20px
     padding-bottom: 10px
+    @media (max-width: 756px)
+      width: 100%
   &__label
     display: flex
     align-items: center
@@ -28,6 +30,14 @@
       margin-left: 0
       margin-right: 10px
       cursor: pointer
-
+  @media (max-width: 756px)
+    position: static
+    display: flex
+    flex-wrap: wrap
+    max-width: 504px
+    width: 90%
+    margin-bottom: 20px
+    margin-right: 0
+    height: auto
 
 

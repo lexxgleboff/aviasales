@@ -1,4 +1,3 @@
-import React from 'react'
 import classes from './Filter.module.sass'
 import { useAppSelector, useAppDispatch } from '../../hook'
 import { minPrice, fastTicket, optimal } from '../../store/ticketSlice'

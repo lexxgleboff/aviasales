@@ -1,4 +1,3 @@
-import React from 'react'
 import classes from './ShowMore.module.sass'
 import { showMore } from '../../store/ticketSlice'
 import { useAppDispatch } from '../../hook'

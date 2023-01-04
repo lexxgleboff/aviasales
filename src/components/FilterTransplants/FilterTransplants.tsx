@@ -1,4 +1,3 @@
-import React from 'react'
 import classes from './FilterTransplants.module.sass'
 import { useAppSelector, useAppDispatch } from '../../hook'
 import {
